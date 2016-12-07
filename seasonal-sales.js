@@ -103,8 +103,8 @@ function seasonDiscounts(event){
 
         for(var i = 0; i < winter_stuff.length; i++) {
 
-            var discount = (((winter_stuff[i].innerText * 100) * .1)/100).toFixed(2);
-            winter_stuff[i].innerText = winter_stuff[i].innerText - discount;
+            var discount = (((winter_stuff[i].innerText * 100) * .1)/100);
+            winter_stuff[i].innerText = (winter_stuff[i].innerText - discount).toFixed(2);
         }
 
     // Add Autumn discounts
@@ -114,8 +114,12 @@ function seasonDiscounts(event){
 
         for(var i = 0; i < autumn_stuff.length; i++) {
 
-            var discount = (((autumn_stuff[i].innerText * 100) * .3)/100).toFixed(2);
-            autumn_stuff[i].innerText = autumn_stuff[i].innerText - discount;
+            var discount = (((autumn_stuff[i].innerText * 100) * .3)/100)//.toFixed(2);
+            console.log('autumn discount ', discount)
+            autumn_stuff[i].innerText = (autumn_stuff[i].innerText - discount).toFixed(2);
+            //parseFloat(autumn_stuff[i].innerText)
+            // console.log(parseFloat(autumn_stuff[i].innerText).toFixed(2))
+            //console.log(autumn_stuff[i].innerText)
         }
 
     // Add Spring discounts
@@ -125,8 +129,8 @@ function seasonDiscounts(event){
 
         for(var i = 0; i < spring_stuff.length; i++) {
 
-            var discount = (((spring_stuff[i].innerText * 100) * .15)/100).toFixed(2);
-            spring_stuff[i].innerText = spring_stuff[i].innerText - discount;
+            var discount = (((spring_stuff[i].innerText * 100) * .15)/100);
+            spring_stuff[i].innerText = (spring_stuff[i].innerText - discount).toFixed(2);
         }
 
     // Return discounts to normal price

@@ -3,7 +3,7 @@
 //console.log("seasonal-sales.js Loaded");
 
 // Store the products/department information globally, so it can be accessed
-var products;
+var productsList;
 var departments;
 
 
@@ -12,9 +12,9 @@ function loadProducts(event) {
 
     console.log("event", event)
 
-    products = JSON.parse(event.target.responseText);
+    productsList = JSON.parse(event.target.responseText);
 
-    console.log("products", products)
+    console.log("products", productsList)
 
     //displayDepartments()
 }
@@ -50,7 +50,7 @@ function displayDepartments(){
         //console.log(departments.categories[i])
         //console.log(departments.categories[i].name)
 
-        departmentDiv.insertAdjacentHTML('afterbegin', `<div id="${departments.categories[i].name}">
+        departmentDiv.insertAdjacentHTML('afterbegin', `<div class="department" id="${departments.categories[i].name}">
                                                         <h2>${departments.categories[i].name}</h2>
                                                         </div>`);
     }
@@ -60,25 +60,22 @@ function displayDepartments(){
 function displayProducts(){
     console.log("displayProducts function called")
 
-    for (var i = 0; i < products.products.length; i++){
+    for (var i = 0; i < productsList.products.length; i++){
         //console.log(products.products[i])
 
-        //console.log("this should be an integer", products.products[i].category_id)
+        if(productsList.products[i].category_id === 1){
 
-        if(products.products[i].category_id === 1){
-            //console.log("this hsould be an integer", products.products.category_id)
-            document.getElementById("Apparel").insertAdjacentHTML('beforeend', `<p>${products.products[i].name}</p>
-                                                                                <p class="price">${products.products[i].price}</p>`)
-
-        } else if (products.products[i].category_id === 2){
-            //console.log("this hsould be an integer", products.products.category_id)
-            document.getElementById("Furniture").insertAdjacentHTML('beforeend', `<p>${products.products[i].name}</p>
-                                                                                <p class="price">${products.products[i].price}</p>`)
-
-        } else if (products.products[i].category_id === 3) {
-            //console.log("this hsould be an integer", products.products.category_id)
-            document.getElementById("Household").insertAdjacentHTML('beforeend', `<p>${products.products[i].name}</p>
-                                                                                <p class="price">${products.products[i].price}</p>`)
+            //document.getElementById("Apparel").innerText = '';
+            document.getElementById("Apparel").insertAdjacentHTML('beforeend', `<p class="name">${productsList.products[i].name}</p>
+                                                                                <p class="price">${productsList.products[i].price}</p>`)
+        } else if (productsList.products[i].category_id === 2){
+            //document.getElementById("Furniture").innerText = '';
+            document.getElementById("Furniture").insertAdjacentHTML('beforeend', `<p class="name">${productsList.products[i].name}</p>
+                                                                                  <p class="price">${productsList.products[i].price}</p>`)
+        } else if (productsList.products[i].category_id === 3) {
+            //document.getElementById("Household").innerText = '';
+            document.getElementById("Household").insertAdjacentHTML('beforeend', `<p class="name">${productsList.products[i].name}</p>
+                                                                                  <p class="price">${productsList.products[i].price}</p>`)
         } else {
             console.log("Something broke")
         }
@@ -89,45 +86,68 @@ function displayProducts(){
 function seasonDiscounts(event){
     console.log("seasonDiscounts function called")
 
-
     //console.log("event", event)
-
-    // create options on the DOM
 
     var discountSelected = document.getElementById("seasonDiscounts").value;  // .selectedIndex?
 
-    console.log(discountSelected);
+    //console.log(discountSelected);
 
+    // This function will prevent applying multiply discounts if the option is switched multiply times
+    resetPrices();
+
+
+    // Add winter discounts
     if (discountSelected === "Winter") {
 
         var winter_stuff = document.getElementById("Apparel").getElementsByClassName('price');
 
         for(var i = 0; i < winter_stuff.length; i++) {
 
-            // .toFixed(2)
-
-            //console.log(winter_stuff[i].innerText)
-            //console.log(winter_stuff[i].innerText * 100)
-            //console.log((winter_stuff[i].innerText * 100) * .1)
-            //console.log(((winter_stuff[i].innerText * 100) * .1))
             var discount = (((winter_stuff[i].innerText * 100) * .1)/100).toFixed(2);
             winter_stuff[i].innerText = winter_stuff[i].innerText - discount;
-            //console.log(winter_stuff[i].innerText);
-
         }
 
-
+    // Add Autumn discounts
     } else if (discountSelected === "Autumn") {
 
+        var autumn_stuff = document.getElementById("Furniture").getElementsByClassName('price');
+
+        for(var i = 0; i < autumn_stuff.length; i++) {
+
+            var discount = (((autumn_stuff[i].innerText * 100) * .3)/100).toFixed(2);
+            autumn_stuff[i].innerText = autumn_stuff[i].innerText - discount;
+        }
+
+    // Add Spring discounts
     } else if (discountSelected === "Spring") {
 
-    } else {
-        // Return regular price
-    }
+        var spring_stuff = document.getElementById("Household").getElementsByClassName('price');
 
+        for(var i = 0; i < spring_stuff.length; i++) {
+
+            var discount = (((spring_stuff[i].innerText * 100) * .15)/100).toFixed(2);
+            spring_stuff[i].innerText = spring_stuff[i].innerText - discount;
+        }
+
+    // Return discounts to normal price
+    } else {
+
+        console.log("return prices to normal")
+
+        resetPrices();
+
+    }
 }
 
 
+function resetPrices () {
+    document.getElementById('departments').innerHTML = '';
+    displayDepartments();
+    displayProducts();
+}
+
+
+// Combine all display functions into one
 function displayMain() {
     addSeasonOptions();
     displayDepartments();
@@ -150,6 +170,3 @@ requestDepartments.send();
 
 // Event listener for select dropdown
 document.getElementById("seasonDiscounts").addEventListener('change', seasonDiscounts);
-
-// Testing Function
-//addSeasonOptions();

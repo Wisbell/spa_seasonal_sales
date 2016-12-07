@@ -2,7 +2,7 @@
 
 //console.log("seasonal-sales.js Loaded");
 
-// Store the products/department information
+// Store the products/department information globally, so it can be accessed
 var products;
 var departments;
 
@@ -63,36 +63,34 @@ function displayProducts(){
     for (var i = 0; i < products.products.length; i++){
         //console.log(products.products[i])
 
-
         //console.log("this should be an integer", products.products[i].category_id)
 
         if(products.products[i].category_id === 1){
             //console.log("this hsould be an integer", products.products.category_id)
             document.getElementById("Apparel").insertAdjacentHTML('beforeend', `<p>${products.products[i].name}</p>
-                                                                                <p>${products.products[i].price}</p>`)
+                                                                                <p class="price">${products.products[i].price}</p>`)
 
         } else if (products.products[i].category_id === 2){
             //console.log("this hsould be an integer", products.products.category_id)
             document.getElementById("Furniture").insertAdjacentHTML('beforeend', `<p>${products.products[i].name}</p>
-                                                                                <p>${products.products[i].price}</p>`)
+                                                                                <p class="price">${products.products[i].price}</p>`)
 
         } else if (products.products[i].category_id === 3) {
             //console.log("this hsould be an integer", products.products.category_id)
             document.getElementById("Household").insertAdjacentHTML('beforeend', `<p>${products.products[i].name}</p>
-                                                                                <p>${products.products[i].price}</p>`)
+                                                                                <p class="price">${products.products[i].price}</p>`)
         } else {
             console.log("Something broke")
         }
     }
-
-
 }
+
 
 function seasonDiscounts(event){
     console.log("seasonDiscounts function called")
 
 
-    console.log("event", event)
+    //console.log("event", event)
 
     // create options on the DOM
 
@@ -100,7 +98,35 @@ function seasonDiscounts(event){
 
     console.log(discountSelected);
 
+    if (discountSelected === "Winter") {
+
+        var winter_stuff = document.getElementById("Apparel").getElementsByClassName('price');
+
+        for(var i = 0; i < winter_stuff.length; i++) {
+
+            // .toFixed(2)
+
+            //console.log(winter_stuff[i].innerText)
+            //console.log(winter_stuff[i].innerText * 100)
+            //console.log((winter_stuff[i].innerText * 100) * .1)
+            //console.log(((winter_stuff[i].innerText * 100) * .1))
+            var discount = (((winter_stuff[i].innerText * 100) * .1)/100).toFixed(2);
+            winter_stuff[i].innerText = winter_stuff[i].innerText - discount;
+            //console.log(winter_stuff[i].innerText);
+
+        }
+
+
+    } else if (discountSelected === "Autumn") {
+
+    } else if (discountSelected === "Spring") {
+
+    } else {
+        // Return regular price
+    }
+
 }
+
 
 function displayMain() {
     addSeasonOptions();
